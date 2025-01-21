@@ -121,3 +121,5 @@ fi
 if uname -m | grep 'aarch64\|arm' >/dev/null; then
     export PATH=$PATH:/usr/x86_64-linux-gnu/bin
 fi
+
+export CMAKE_PREFIX_PATH=/home/cs1952y-user/Qt6.8.0/install

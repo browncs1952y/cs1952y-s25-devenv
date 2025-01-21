@@ -41,27 +41,32 @@ RUN useradd -m -s /bin/bash cs1952y-user && \
 # create binary reporting version of dockerfile
 RUN (echo '#\!/bin/sh'; echo 'echo 1') > /usr/bin/cs1952y-docker-version; chmod ugo+rx,u+w,go-w /usr/bin/cs1952y-docker-version
 
-# clone qt6 repo
-RUN git clone git://code.qt.io/qt/qt5.git /home/qt6 &&\
-  cd /home/qt6 &&\
-  git switch 6.5.1 &&\
-  perl init-repository --module-subset=qtbase,qtsvg,qtcharts
+# build Qt6.8.0
+RUN mkdir /home/cs1952y-user/Qt6.8.0 && cd /home/cs1952y-user/Qt6.8.0 &&\ 
+  wget https://download.qt.io/official_releases/qt/6.8/6.8.0/submodules/qtbase-everywhere-src-6.8.0.tar.xz https://download.qt.io/official_releases/qt/6.8/6.8.0/submodules/qtcharts-everywhere-src-6.8.0.tar.xz https://download.qt.io/official_releases/qt/6.8/6.8.0/submodules/qtsvg-everywhere-src-6.8.0.tar.xz &&\
+  for f in *.tar.xz; do tar xvf "$f"; done && rm *.tar.xz
+ 
+RUN mkdir /home/cs1952y-user/Qt6.8.0/install
 
-# build qt6.5.1 from source
-RUN mkdir /home/qt6.5.1-build &&\
-  cd /home/qt6.5.1-build &&\
-  ../qt6/configure -prefix /home/qt6/install &&\
-  cmake --build . --parallel 4 &&\
-  cmake --install .
+RUN cd /home/cs1952y-user/Qt6.8.0/qtbase-everywhere-src-6.8.0 && ./configure -prefix /home/cs1952y-user/Qt6.8.0/install &&\ 
+cmake --build . --parallel && cmake --install .
 
-ENV CMAKE_PREFIX_PATH=/home/qt6/install
+RUN cd /home/cs1952y-user/Qt6.8.0/qtcharts-everywhere-src-6.8.0 &&\ 
+/home/cs1952y-user/Qt6.8.0/install/bin/qt-configure-module . &&\
+ cmake --build . --parallel && cmake --install .
+
+RUN cd /home/cs1952y-user/Qt6.8.0/qtsvg-everywhere-src-6.8.0 &&\
+ /home/cs1952y-user/Qt6.8.0/install/bin/qt-configure-module . &&\
+  cmake --build . --parallel && cmake --install .
+
+ENV CMAKE_PREFIX_PATH=/home/cs1952y-user/Qt6.8.0/install
 
 # clone Ripes repo
 RUN git clone --recursive https://github.com/browncs1952y/Ripes-1952y /home/cs1952y-user/Ripes
 
 # build ripes from source
 RUN cd /home/cs1952y-user/Ripes &&\
-  cmake . -DCMAKE_PREFIX_PATH=/home/qt6/install &&\
+  cmake . -DCMAKE_PREFIX_PATH=/home/cs1952y-user/Qt6.8.0/install &&\
   make -j8
 
 # clone gem5 repo

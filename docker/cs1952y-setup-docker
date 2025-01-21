@@ -46,7 +46,7 @@ elif test -z "$tag"; then
     tag=cs1952y:latest
 fi
 
-dockeruser=mramesh5
+dockeruser=mziz
 image=$dockeruser/$tag
 
 docker pull $image
