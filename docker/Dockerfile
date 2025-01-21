@@ -75,7 +75,7 @@ RUN git clone https://github.com/browncs1952y/gem5-assignments-stencil /home/cs1
 
 # compile gem5
 RUN cd /home/cs1952y-user/gem5 &&\
-  scons build/RISCV/gem5.debug -j4
+  scons build/RISCV/gem5.debug -j4 --linker=gold
 
 # configure your environment
 ARG USER=cs1952y\ User
