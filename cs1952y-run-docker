@@ -105,6 +105,7 @@ copy_directories_to_host() {
   echo "Copying gem5 and Ripes directories to host..."
   docker cp "${temp_container_name}:/home/cs1952y-user/gem5" "$maindir/home"
   docker cp "${temp_container_name}:/home/cs1952y-user/Ripes" "$maindir/home"
+  docker cp "${temp_container_name}:/home/cs1952y-user/Qt6.8.0" "$maindir/home"
 
   echo "Stopping and removing temporary container..."
   docker stop "$temp_container_name"
