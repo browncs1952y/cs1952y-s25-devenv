@@ -66,31 +66,31 @@ RUN useradd -m -s /bin/bash cs1952y-user && \
 RUN (echo '#\!/bin/sh'; echo 'echo 1') > /usr/bin/cs1952y-docker-version; chmod ugo+rx,u+w,go-w /usr/bin/cs1952y-docker-version
 
 # build Qt6.8.0
-RUN mkdir /home/cs1952y-user/Qt6.8.0 && cd /home/cs1952y-user/Qt6.8.0 &&\ 
+RUN mkdir /Qt6.8.0 && cd /Qt6.8.0 &&\ 
   wget https://download.qt.io/official_releases/qt/6.8/6.8.0/submodules/qtbase-everywhere-src-6.8.0.tar.xz https://download.qt.io/official_releases/qt/6.8/6.8.0/submodules/qtcharts-everywhere-src-6.8.0.tar.xz https://download.qt.io/official_releases/qt/6.8/6.8.0/submodules/qtsvg-everywhere-src-6.8.0.tar.xz &&\
   for f in *.tar.xz; do tar xvf "$f"; done && rm *.tar.xz
  
-RUN mkdir /home/cs1952y-user/Qt6.8.0/install
+RUN mkdir /Qt6.8.0/install
 
-RUN cd /home/cs1952y-user/Qt6.8.0/qtbase-everywhere-src-6.8.0 && ./configure -prefix /home/cs1952y-user/Qt6.8.0/install &&\ 
+RUN cd /Qt6.8.0/qtbase-everywhere-src-6.8.0 && ./configure -prefix /Qt6.8.0/install &&\ 
   cmake --build . --parallel && cmake --install .
 
-RUN cd /home/cs1952y-user/Qt6.8.0/qtcharts-everywhere-src-6.8.0 &&\ 
-/home/cs1952y-user/Qt6.8.0/install/bin/qt-configure-module . &&\
+RUN cd /Qt6.8.0/qtcharts-everywhere-src-6.8.0 &&\ 
+/Qt6.8.0/install/bin/qt-configure-module . &&\
  cmake --build . --parallel && cmake --install .
 
-RUN cd /home/cs1952y-user/Qt6.8.0/qtsvg-everywhere-src-6.8.0 &&\
- /home/cs1952y-user/Qt6.8.0/install/bin/qt-configure-module . &&\
+RUN cd /Qt6.8.0/qtsvg-everywhere-src-6.8.0 &&\
+ /Qt6.8.0/install/bin/qt-configure-module . &&\
   cmake --build . --parallel && cmake --install .
 
-ENV CMAKE_PREFIX_PATH=/home/cs1952y-user/Qt6.8.0/install
+ENV CMAKE_PREFIX_PATH=/Qt6.8.0/install
 
 # clone Ripes repo
 RUN git clone --recursive https://github.com/browncs1952y/Ripes-1952y /home/cs1952y-user/Ripes
 
 # build ripes from source
 RUN cd /home/cs1952y-user/Ripes &&\
-  cmake . -DCMAKE_PREFIX_PATH=/home/cs1952y-user/Qt6.8.0/install &&\
+  cmake . -DCMAKE_PREFIX_PATH=/Qt6.8.0/install &&\
   make -j8
 
 # clone gem5 repo
