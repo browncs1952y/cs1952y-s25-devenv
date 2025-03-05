@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: GHCR build
 
 on:
   workflow_dispatch
@@ -7,7 +7,7 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-latest-large
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
