@@ -45,3 +45,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:amd64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
