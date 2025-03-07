@@ -6,6 +6,12 @@ LABEL org.opencontainers.image.source https://github.com/browncs1952y/cs1952y-de
 ARG TZ=America/New_York
 ENV TZ=${TZ}
 
+# configure your environment
+ARG USER=cs1952y\ User
+ARG EMAIL=nobody@example.com
+
+USER cs1952y-user
+
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update &&\
   yes | unminimize &&\
@@ -71,22 +77,14 @@ RUN cd /home/cs1952y-user/Ripes &&\
   cmake . -DCMAKE_PREFIX_PATH=/Qt6.8.0/install &&\
   make -j8
 
-# clone gem5 repo
+# clone and compile gem5
 RUN git clone https://github.com/browncs1952y/gem5-assignments-stencil /home/cs1952y-user/gem5 &&\
-  chmod ugo+rx,u+w,go-w /home/cs1952y-user/gem5
-
-# compile gem5
-RUN mkdir /gem5_build && mkdir /gem5_cache && cd /home/cs1952y-user/gem5 &&\
+  mkdir /gem5_build && mkdir /gem5_cache && cd /home/cs1952y-user/gem5 &&\
   scons defconfig /gem5_build build_opts/RISCV --ignore-style &&\
   scons setconfig /gem5_build USE_KVM=y --ignore-style &&\
   scons setconfig /gem5_build M5_BUILD_CACHE=/gem5_cache --ignore-style &&\
   scons /gem5_build/gem5.debug -j4 --linker=gold --limit-ld-memory-usage --ignore-style
 
-# configure your environment
-ARG USER=cs1952y\ User
-ARG EMAIL=nobody@example.com
-
-USER cs1952y-user
 RUN rm -f ~/.bash_logout
 
 WORKDIR /home/cs1952y-user
