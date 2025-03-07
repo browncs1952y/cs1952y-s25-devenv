@@ -54,7 +54,7 @@ if [[ "$platform" == "-gh" ]]; then
         echo "-gh flag does not work on ARM64 hosts"
         exit 1
     fi
-
+    platform=linux/amd64
     tag=cs1952y:gh
 else
   # set default platform if no arguments were provided
