@@ -49,7 +49,7 @@ while test "$#" -ne 0; do
 done
 
 # experimental: use ghcr for amd64 image
-if [[ "$platform" == "-gh" ]]; then
+if [[ "$platform" == "gh" ]]; then
     if test "$arch" = "arm64" -o "$arch" = "aarch64"; then
         echo "-gh flag does not work on ARM64 hosts"
         exit 1
