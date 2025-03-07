@@ -6,16 +6,6 @@ LABEL org.opencontainers.image.source https://github.com/browncs1952y/cs1952y-de
 ARG TZ=America/New_York
 ENV TZ=${TZ}
 
-# configure your environment
-ARG USER=cs1952y\ User
-ARG EMAIL=nobody@example.com
-
-# set up passwordless sudo for user cs1952y-user
-RUN useradd -m -s /bin/bash cs1952y-user && \
-  echo "cs1952y-user ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/cs1952y-init
-
-USER cs1952y-user
-
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update &&\
   yes | unminimize &&\
@@ -45,6 +35,16 @@ ENV LANG en_US.UTF-8
 
 # remove unneeded .deb files
 RUN rm -r /var/lib/apt/lists/*
+
+# configure your environment
+ARG USER=cs1952y\ User
+ARG EMAIL=nobody@example.com
+
+# set up passwordless sudo for user cs1952y-user
+RUN useradd -m -s /bin/bash cs1952y-user && \
+  echo "cs1952y-user ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/cs1952y-init
+
+USER cs1952y-user
 
 # create binary reporting version of dockerfile
 RUN (echo '#\!/bin/sh'; echo 'echo 1') > /usr/bin/cs1952y-docker-version; chmod ugo+rx,u+w,go-w /usr/bin/cs1952y-docker-version
