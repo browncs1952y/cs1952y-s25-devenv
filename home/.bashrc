@@ -127,3 +127,5 @@ if [ -d /Qt6.8.0/install ]; then
 else
    export CMAKE_PREFIX_PATH=/home/cs1952y-user/Qt6.8.0/install
 fi
+
+alias build-gem5-gh="scons /gem5_build/gem5.debug -j4 --linker=gold --limit-ld-memory-usage --ignore-style"
