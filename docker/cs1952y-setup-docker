@@ -2,6 +2,10 @@
 
 cd "$(dirname "$0")" || exit
 
+arch="$(uname -m)"
+tag=
+platform=
+
 # experimental: use ghcr for amd64 image
 if [[ "$1" == "-gh" ]]; then
     if test "$arch" = "arm64" -o "$arch" = "aarch64"; then
@@ -13,10 +17,6 @@ if [[ "$1" == "-gh" ]]; then
     docker tag ghcr.io/browncs1952y/cs1952y-devenv:amd64 cs1952y:gh
     exit 0
 fi
-
-arch="$(uname -m)"
-tag=
-platform=
 
 # set platform based on architecture
 while test "$#" -ne 0; do
